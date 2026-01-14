@@ -2,6 +2,7 @@ package server;
 
 import java.io.*;
 import java.nio.file.*;
+import java.nio.file.StandardOpenOption;
 
 /**
  * サーバー側のファイルシステム操作を担当するクラス。
