@@ -28,21 +28,6 @@ public class DFSClient {
     }
 
     /**
-     * DFSサーバーに接続します。
-     * <p>
-     * ファイル操作を行う前に必ず呼び出す必要があります。
-     * </p>
-     *
-     * @param host サーバーのホスト名またはIPアドレス
-     * @param port ポート番号
-     * @throws IOException 接続に失敗した場合
-     */
-    public void connect(String host, int port) throws IOException {
-        this.networkClient.connect(host, port);
-        System.out.println("[Client] Connected to server " + host + ":" + port);
-    }
-
-    /**
      * サーバーとの接続を切断します。
      * すべてのファイル操作を終えた後に呼び出してください。
      *
@@ -60,6 +45,7 @@ public class DFSClient {
      * <p>
      * このメソッドは以下の手順で <strong>Close-to-Open 一貫性</strong> を保証します：
      * <ol>
+     * <li>サーバーに接続します（既に接続されている場合は接続先を確認し、必要に応じて再接続）。</li>
      * <li>サーバーに対して指定モードでのロックを要求します（取得できるまで待機）。</li>
      * <li>サーバー上の最終更新日時（メタデータ）を取得します。</li>
      * <li>ローカルキャッシュの最終更新日時と比較します。</li>
@@ -67,14 +53,18 @@ public class DFSClient {
      * <li>ローカルキャッシュに対するファイル操作ハンドル({@link DFSFileHandle})を生成して返します。</li>
      * </ol>
      *
+     * @param host サーバーのホスト名またはIPアドレス
+     * @param port ポート番号
      * @param path 対象ファイルパス
      * @param mode アクセスモード ("ro", "wo", "rw")
      * @return ファイル操作用ハンドル。使用後は必ず close() してください。
      * @throws IOException 通信エラー、ロック取得失敗、またはファイル操作エラー
      */
-    public DFSFileHandle open(String path, String mode) throws IOException {
-        if (!networkClient.isConnected()) {
-            throw new IOException("Client is not connected to server.");
+    public DFSFileHandle open(String host, int port, String path, String mode) throws IOException {
+        // 接続状態を確認し、必要に応じて接続または再接続
+        if (!networkClient.isConnected() || !networkClient.isConnectedTo(host, port)) {
+            networkClient.connect(host, port);
+            System.out.println("[Client] Connected to server " + host + ":" + port);
         }
 
         System.out.println("[Client] Opening file: " + path + " (" + mode + ")");

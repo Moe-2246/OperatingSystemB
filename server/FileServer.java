@@ -25,13 +25,11 @@ public class FileServer {
     public FileServer() {
     }
 
-    /** サーバーが待ち受けるポート番号 (TCP) */
-    private static final int PORT = 9000;
+    /** デフォルトのポート番号 */
+    private static final int DEFAULT_PORT = 9000;
 
-    /** * サーバー側のファイル保存ルートディレクトリ名。
-     * カレントディレクトリ直下に作成されます。
-     */
-    private static final String ROOT_DIR = "server_storage";
+    /** デフォルトのファイル保存ルートディレクトリ名 */
+    private static final String DEFAULT_ROOT_DIR = "server_storage";
 
     /**
      * サーバーのメインメソッド。
@@ -39,18 +37,41 @@ public class FileServer {
      * 以下の手順でサーバーを起動します：
      * <ol>
      * <li>ファイル保存用ディレクトリの初期化（存在しない場合は作成）</li>
-     * <li>ServerSocketの開設（ポート9000）</li>
+     * <li>ServerSocketの開設（指定されたポート、またはデフォルト9000）</li>
      * <li>無限ループによる接続待ち受け（accept）</li>
      * <li>接続確立ごとの新規スレッド起動</li>
      * </ol>
      *
-     * @param args コマンドライン引数（現在は使用していません）
+     * @param args コマンドライン引数
+     *              <ul>
+     *              <li>args[0]: ポート番号（オプション、デフォルト: 9000）</li>
+     *              <li>args[1]: ファイル保存ディレクトリ（オプション、デフォルト: server_storage）</li>
+     *              </ul>
      */
     public static void main(String[] args) {
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+        // コマンドライン引数の解析
+        int port = DEFAULT_PORT;
+        String rootDir = DEFAULT_ROOT_DIR;
 
-            ClientHandler.initFileManager(ROOT_DIR);
-            System.out.println("FileServer started on port " + PORT);
+        if (args.length > 0) {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid port number: " + args[0]);
+                System.err.println("Usage: java server.FileServer [port] [rootDir]");
+                System.exit(1);
+            }
+        }
+
+        if (args.length > 1) {
+            rootDir = args[1];
+        }
+
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+
+            ClientHandler.initFileManager(rootDir);
+            System.out.println("FileServer started on port " + port);
+            System.out.println("Storage directory: " + rootDir);
 
             while (true) {
                 Socket socket = serverSocket.accept();

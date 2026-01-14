@@ -8,8 +8,7 @@ import java.util.Scanner;
  * <p>
  * コマンドラインから対話形式で以下のコマンドを実行できます。
  * <ul>
- * <li>connect [host] [port] : サーバーに接続</li>
- * <li>open [path] [mode]    : ファイルを開く (mode: ro, wo, rw)</li>
+ * <li>open [host] [port] [path] [mode] : サーバーに接続してファイルを開く (mode: ro, wo, rw)</li>
  * <li>read [length]         : 開いているファイルから指定バイト数読み込む</li>
  * <li>write [text]          : 開いているファイルにテキストを書き込む</li>
  * <li>seek [position]       : ファイルポインタを移動する</li>
@@ -42,7 +41,7 @@ public class ClientMain {
             DFSFileHandle currentHandle = null;
 
             System.out.println("=== DFS Client Shell (Cache: " + cacheDir + ") ===");
-            System.out.println("Commands: connect, open, read, write, seek, close, exit");
+            System.out.println("Commands: open, read, write, seek, close, exit");
 
             while (true) {
                 System.out.print("> ");
@@ -60,22 +59,18 @@ public class ClientMain {
                             System.out.println("Bye.");
                             return;
 
-                        case "connect":
-                            if (parts.length < 3) {
-                                System.out.println("Usage: connect <host> <port>");
-                            } else {
-                                client.connect(parts[1], Integer.parseInt(parts[2]));
-                            }
-                            break;
-
                         case "open":
-                            if (parts.length < 3) {
-                                System.out.println("Usage: open <path> <mode>");
+                            if (parts.length < 5) {
+                                System.out.println("Usage: open <host> <port> <path> <mode>");
                             } else {
                                 if (currentHandle != null) {
                                     System.out.println("Error: A file is already open. Close it first.");
                                 } else {
-                                    currentHandle = client.open(parts[1], parts[2]);
+                                    String host = parts[1];
+                                    int port = Integer.parseInt(parts[2]);
+                                    String path = parts[3];
+                                    String mode = parts[4];
+                                    currentHandle = client.open(host, port, path, mode);
                                     System.out.println("File opened successfully.");
                                 }
                             }
