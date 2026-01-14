@@ -8,3 +8,8 @@ server_storage/
 # クライアントのキャッシュディレクトリ
 client_cache*/
 cache_*/
+
+# javaのコンパイルファイル
+/common/*.class
+/server/*.class
+/client/*/class
