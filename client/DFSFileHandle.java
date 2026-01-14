@@ -110,7 +110,6 @@ public class DFSFileHandle implements AutoCloseable {
      * <li>書き込み権限があり、かつ変更が行われている場合(dirty)、サーバーへファイルをアップロードする。</li>
      * <li>サーバーへロック解放(UNLOCK)を要求する。</li>
      * </ol>
-     * </p>
      *
      * @throws IOException 通信エラーまたはファイル操作エラー
      */

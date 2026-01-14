@@ -10,7 +10,9 @@ import java.net.Socket;
  * 受信したバイト列を {@link Packet} オブジェクトに復元する機能を提供します。
  * クライアントとサーバー間で共通の通信プロトコル（データ形式）を強制します。
  * </p>
- * * <strong>通信フォーマット:</strong>
+ * <p>
+ * <strong>通信フォーマット:</strong>
+ * </p>
  * <pre>
  * [コマンドID (int: 4byte)]
  * [ペイロード長 (int: 4byte)]
@@ -18,6 +20,13 @@ import java.net.Socket;
  * </pre>
  */
 public class SocketIO {
+
+    /**
+     * デフォルトコンストラクタ。
+     */
+    private SocketIO() {
+        // ユーティリティクラスのため、インスタンス化を禁止
+    }
 
     /**
      * 指定されたソケットを通じてパケットを送信します。

@@ -9,8 +9,10 @@ package common;
  * </p>
  */
 public class Packet {
-    public Command command; // 何の命令か
-    public byte[] payload;  // データの中身(不要時は空)
+    /** 何の命令か */
+    public Command command;
+    /** データの中身(不要時は空) */
+    public byte[] payload;
 
     /**
      * コマンドとペイロードを指定してパケットを生成します。

@@ -16,10 +16,20 @@ import java.util.Scanner;
  * <li>close                 : ファイルを閉じる（サーバーへ反映・ロック解除）</li>
  * <li>exit                  : プログラム終了</li>
  * </ul>
- * </p>
  */
 public class ClientMain {
 
+    /**
+     * デフォルトコンストラクタ。
+     */
+    public ClientMain() {
+    }
+
+    /**
+     * クライアントのメインメソッド。
+     *
+     * @param args コマンドライン引数。第1引数にキャッシュディレクトリを指定可能
+     */
     public static void main(String[] args) {
         // 1台のPCで複数クライアントを起動してテストする場合、
         // キャッシュディレクトリが被らないように引数で指定できるようにする

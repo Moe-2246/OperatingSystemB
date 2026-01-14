@@ -18,6 +18,12 @@ import java.util.Map;
 public class LockManager {
 
     /**
+     * デフォルトコンストラクタ。
+     */
+    public LockManager() {
+    }
+
+    /**
      * ファイルパスと、そのファイルのロック情報を紐付けるマップ。
      * キー: ファイルパス (String)
      * 値: ロック情報 (FileLockInfo)

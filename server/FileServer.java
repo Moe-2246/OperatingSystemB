@@ -19,6 +19,12 @@ import java.net.Socket;
  */
 public class FileServer {
 
+    /**
+     * デフォルトコンストラクタ。
+     */
+    public FileServer() {
+    }
+
     /** サーバーが待ち受けるポート番号 (TCP) */
     private static final int PORT = 9000;
 
@@ -37,7 +43,6 @@ public class FileServer {
      * <li>無限ループによる接続待ち受け（accept）</li>
      * <li>接続確立ごとの新規スレッド起動</li>
      * </ol>
-     * </p>
      *
      * @param args コマンドライン引数（現在は使用していません）
      */

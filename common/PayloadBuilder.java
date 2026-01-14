@@ -18,6 +18,13 @@ import java.nio.charset.StandardCharsets;
  */
 public class PayloadBuilder {
 
+    /**
+     * デフォルトコンストラクタ。
+     */
+    private PayloadBuilder() {
+        // ユーティリティクラスのため、インスタンス化を禁止
+    }
+
     // ==========================================
     // ビルダー (書き込み用)
     // ==========================================
@@ -70,6 +77,11 @@ public class PayloadBuilder {
      * 構造: [パスの長さ][パス文字列][モードの長さ][モード文字列]
      * LOCK_REQと同じ構造なので、内部で buildLockReqPayload を再利用します。
      * </p>
+     *
+     * @param path 対象ファイルパス
+     * @param mode ロックモード ("ro", "rw" 等)
+     * @return フォーマット済みのバイト配列
+     * @throws IOException ストリーム操作時の例外
      */
     public static byte[] buildUnlockPayload(String path, String mode) throws IOException {
         // 構造が同じなので、既存のメソッドを使って作成します。
@@ -139,7 +151,8 @@ public class PayloadBuilder {
      * 構造は {@link #parseLockReqPayload} と完全に同じ（パス + モード）であるため、
      * 内部ロジックまたはメソッドを再利用します。
      * </p>
-     * * @param payload 受信したペイロード
+     *
+     * @param payload 受信したペイロード
      * @return 解析結果（LockReqDataを再利用、あるいは汎用的なクラス名に変更してもOK）
      * @throws IOException データ形式が不正な場合
      */
@@ -206,9 +219,17 @@ public class PayloadBuilder {
      * PUT_FILEコマンドの解析結果を保持するデータクラス。
      */
     public static class PutFileData {
+        /** ファイルパス */
         public final String path;
+        /** ファイルの内容 */
         public final byte[] content;
 
+        /**
+         * PutFileDataを構築します。
+         *
+         * @param path ファイルパス
+         * @param content ファイルの内容
+         */
         public PutFileData(String path, byte[] content) {
             this.path = path;
             this.content = content;
@@ -219,9 +240,17 @@ public class PayloadBuilder {
      * LOCK_REQ（ロック要求）のペイロードを解析結果を保持するデータクラス。
      */
     public static class LockReqData {
+        /** ファイルパス */
         public final String path;
+        /** ロックモード */
         public final String mode;
 
+        /**
+         * LockReqDataを構築します。
+         *
+         * @param path ファイルパス
+         * @param mode ロックモード
+         */
         public LockReqData(String path, String mode) {
             this.path = path;
             this.mode = mode;

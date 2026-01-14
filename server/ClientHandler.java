@@ -29,7 +29,8 @@ public class ClientHandler implements Runnable {
 
     /**
      * ファイルマネージャーを初期化します。サーバー起動時に一度だけ呼び出してください。
-     * * @param rootDir サーバーのルートディレクトリパス
+     * 
+     * @param rootDir サーバーのルートディレクトリパス
      * @throws IOException ディレクトリ作成失敗時など
      */
     public static void initFileManager(String rootDir) throws IOException {

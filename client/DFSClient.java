@@ -66,7 +66,6 @@ public class DFSClient {
      * <li>サーバー側が新しい、またはローカルにキャッシュがない場合、サーバーから最新ファイルをダウンロードしてキャッシュを更新します。</li>
      * <li>ローカルキャッシュに対するファイル操作ハンドル({@link DFSFileHandle})を生成して返します。</li>
      * </ol>
-     * </p>
      *
      * @param path 対象ファイルパス
      * @param mode アクセスモード ("ro", "wo", "rw")

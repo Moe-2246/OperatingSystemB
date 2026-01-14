@@ -19,6 +19,12 @@ import common.SocketIO;
  */
 public class NetworkClient {
 
+    /**
+     * デフォルトコンストラクタ。
+     */
+    public NetworkClient() {
+    }
+
     private Socket socket;
 
     /**

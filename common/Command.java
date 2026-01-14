@@ -8,18 +8,25 @@ package common;
  * </p>
  */
 public enum Command {
-    // クライアント -> サーバー
-    LOCK_REQ(1),   // 指定パスのファイルにロック要求 (path, mode)
-    GET_META(2),   // 指定パスファイルの最終更新日時の取得要求 (path)
-    GET_FILE(3),   // ダウンロード要求 (path)
-    PUT_FILE(4),   // アップロード (path, data)
-    UNLOCK(5),     // ロック解放 (path, mode)
+    /** 指定パスのファイルにロック要求 (path, mode) */
+    LOCK_REQ(1),
+    /** 指定パスファイルの最終更新日時の取得要求 (path) */
+    GET_META(2),
+    /** ダウンロード要求 (path) */
+    GET_FILE(3),
+    /** アップロード (path, data) */
+    PUT_FILE(4),
+    /** ロック解放 (path, mode) */
+    UNLOCK(5),
 
-    // サーバー -> クライアント
-    RES_OK(10),       // 成功
-    RES_FAIL(11),     // 失敗 (ロック取得失敗、ファイルが見つからないなど)
-    META_RES(12),     // GET_METAに対して更新日時返却 (long timestamp)
-    FILE_RES(13);     // GET_FILEに対してファイルデータ返却 (byte[] data)
+    /** 成功 */
+    RES_OK(10),
+    /** 失敗 (ロック取得失敗、ファイルが見つからないなど) */
+    RES_FAIL(11),
+    /** GET_METAに対して更新日時返却 (long timestamp) */
+    META_RES(12),
+    /** GET_FILEに対してファイルデータ返却 (byte[] data) */
+    FILE_RES(13);
 
     /** コマンドに対応するID値 */
     private final int id;
