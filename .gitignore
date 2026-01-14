@@ -1,0 +1,10 @@
+# javadoc出力
+doc/
+docs/
+
+# サーバのディレクトリ
+server_storage/
+
+# クライアントのキャッシュディレクトリ
+client_cache*/
+cache_*/
