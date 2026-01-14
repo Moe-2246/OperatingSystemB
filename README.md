@@ -118,21 +118,9 @@ OperatingSystemB/
 
 ## ビルドと実行
 
-### 前提条件
-
-- Java 21以上
-- コマンドライン環境
-
 ### コンパイル
 
 ```bash
-# サーバー側をコンパイル
-javac server/*.java common/*.java
-
-# クライアント側をコンパイル
-javac client/*.java common/*.java
-
-# または、全てを一度にコンパイル
 javac server/*.java client/*.java common/*.java
 ```
 
@@ -299,7 +287,3 @@ javadoc -d doc common/*.java server/*.java client/*.java
 - ファイルパスにはディレクトリトラバーサル攻撃を防ぐための検証が実装されています
 - 大きなファイル（100MB以上）の転送は制限されています
 - ロックはサーバー側で管理され、クライアントが切断されても自動的に解放されません（実装の簡略化のため）
-
-## ライセンス
-
-このプロジェクトは教育目的で作成されています。
