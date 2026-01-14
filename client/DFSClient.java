@@ -8,7 +8,7 @@ import java.io.RandomAccessFile;
  * <p>
  * ユーザーはこのクラスのメソッドを通じて、サーバーへの接続やファイルのオープンを行います。
  * <strong>Close-to-Open 一貫性モデル</strong> を実現するための主要なロジック
- * （ロック取得、メタデータ比較、キャッシュ同期）は、このクラスの {@link #open(String, String)} メソッドに集約されています。
+ * （ロック取得、メタデータ比較、キャッシュ同期）は、このクラスの {@link #open(String, int, String, String)} メソッドに集約されています。
  * </p>
  */
 public class DFSClient {
