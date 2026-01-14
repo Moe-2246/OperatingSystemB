@@ -2,6 +2,7 @@ package client;
 
 import java.io.*;
 import java.nio.file.*;
+import java.nio.file.StandardOpenOption;
 
 /**
  * クライアント側のローカルキャッシュ（ファイルシステム）を管理するクラス。
