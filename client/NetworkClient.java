@@ -26,16 +26,29 @@ public class NetworkClient {
     }
 
     private Socket socket;
+    private String currentHost;
+    private int currentPort;
 
     /**
      * 指定されたホストとポートのサーバーに接続します。
+     * 既に接続されている場合は、既存の接続を切断してから新しい接続を確立します。
      *
      * @param host サーバーのホスト名またはIPアドレス
      * @param port ポート番号
      * @throws IOException 接続に失敗した場合
      */
     public void connect(String host, int port) throws IOException {
+        // 既存の接続があれば切断
+        if (socket != null && !socket.isClosed()) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                // 無視
+            }
+        }
         this.socket = new Socket(host, port);
+        this.currentHost = host;
+        this.currentPort = port;
     }
 
     /**
@@ -47,6 +60,8 @@ public class NetworkClient {
         if (socket != null && !socket.isClosed()) {
             socket.close();
         }
+        currentHost = null;
+        currentPort = -1;
     }
 
     /**
@@ -55,6 +70,17 @@ public class NetworkClient {
      */
     public boolean isConnected() {
         return socket != null && !socket.isClosed() && socket.isConnected();
+    }
+
+    /**
+     * 指定されたホストとポートに接続されているかどうかを確認します。
+     *
+     * @param host 確認するホスト名またはIPアドレス
+     * @param port 確認するポート番号
+     * @return 指定されたホストとポートに接続されている場合は true
+     */
+    public boolean isConnectedTo(String host, int port) {
+        return isConnected() && host.equals(currentHost) && port == currentPort;
     }
 
     // ==========================================

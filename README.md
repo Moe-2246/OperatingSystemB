@@ -49,6 +49,7 @@
 ### 通信フロー
 
 1. **ファイルオープン時**:
+   - クライアントがサーバーに接続（必要に応じて）
    - クライアントがサーバーにロック要求（LOCK_REQ）
    - サーバーがロックを取得（取得できるまで待機）
    - クライアントがメタデータを取得（GET_META）
@@ -130,10 +131,17 @@ javac server/*.java client/*.java common/*.java
 #### サーバーの起動
 
 ```bash
+# デフォルト設定（ポート9000、ディレクトリserver_storage）で起動
 java server.FileServer
+
+# ポート番号を指定
+java server.FileServer 8080
+
+# ポート番号と保存ディレクトリを指定
+java server.FileServer 8080 my_storage
 ```
 
-サーバーはポート9000で待ち受けます。ファイルは `server_storage/` ディレクトリに保存されます。
+サーバーは指定されたポート（デフォルト: 9000）で待ち受けます。ファイルは指定されたディレクトリ（デフォルト: `server_storage/`）に保存されます。
 
 #### クライアントの起動
 
@@ -154,24 +162,20 @@ java client.ClientMain cache_A
 クライアント起動後、以下のコマンドが使用できます：
 
 ```
-connect <host> <port>    # サーバーに接続
-open <path> <mode>       # ファイルを開く (mode: ro, wo, rw)
-read [length]            # ファイルから読み込む（デフォルト: 1024バイト）
-write <text>             # ファイルに書き込む
-seek <position>          # ファイルポインタを移動
-close                    # ファイルを閉じる（サーバーへ反映・ロック解除）
-exit                     # プログラム終了
+open <host> <port> <path> <mode>  # サーバーに接続してファイルを開く (mode: ro, wo, rw)
+read [length]                      # ファイルから読み込む（デフォルト: 1024バイト）
+write <text>                       # ファイルに書き込む
+seek <position>                    # ファイルポインタを移動
+close                              # ファイルを閉じる（サーバーへ反映・ロック解除）
+exit                               # プログラム終了
 ```
 
 ### 使用例
 
 ```bash
-# サーバーに接続
-> connect localhost 9000
+# サーバーに接続してファイルを読み書きモードで開く
+> open localhost 9000 test.txt rw
 [Client] Connected to server localhost:9000
-
-# ファイルを読み書きモードで開く
-> open test.txt rw
 [Client] Opening file: test.txt (rw)
   Server Time: 1234567890
   Local Time:  -1
