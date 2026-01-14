@@ -1,7 +1,5 @@
 package server;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -29,8 +27,7 @@ public class ClientHandler implements Runnable {
 
     /**
      * ファイルマネージャーを初期化します。サーバー起動時に一度だけ呼び出してください。
-     * 
-     * @param rootDir サーバーのルートディレクトリパス
+     * * @param rootDir サーバーのルートディレクトリパス
      * @throws IOException ディレクトリ作成失敗時など
      */
     public static void initFileManager(String rootDir) throws IOException {
@@ -114,7 +111,6 @@ public class ClientHandler implements Runnable {
      * ペイロード構造: [path][mode]
      */
     private void handleLockReq(Packet packet) throws IOException {
-        // ★修正箇所: PayloadBuilderに追加したメソッドを使うことで、非常にシンプルになります
 
         // 1. パース処理 (警告が出ていた変数や複雑なdis処理は削除)
         PayloadBuilder.LockReqData data = PayloadBuilder.parseLockReqPayload(packet.payload);
@@ -123,7 +119,6 @@ public class ClientHandler implements Runnable {
 
         try {
             // 2. ロック取得（取得できるまでブロック待機）
-            // ここで data.path, data.mode を使用します
             lockManager.lock(data.path, data.mode);
 
             System.out.println("  -> LOCK GRANTED");
@@ -140,7 +135,6 @@ public class ClientHandler implements Runnable {
      * ペイロード構造: [path]
      */
     private void handleGetMeta(Packet packet) throws IOException {
-        // 修正: PayloadBuilderを使ってパスを取り出す
         String path = PayloadBuilder.parseStringPayload(packet.payload);
         System.out.println("  [GET_META] path=" + path);
 
@@ -158,7 +152,6 @@ public class ClientHandler implements Runnable {
      * ペイロード構造: [path]
      */
     private void handleGetFile(Packet packet) throws IOException {
-        // 修正: PayloadBuilderを使ってパスを取り出す
         String path = PayloadBuilder.parseStringPayload(packet.payload);
         System.out.println("  [GET_FILE] path=" + path);
 
@@ -180,7 +173,6 @@ public class ClientHandler implements Runnable {
         System.out.println("  [PUT_FILE]");
 
         try {
-            // PayloadBuilderの専用パーサーを使用
             PutFileData data = PayloadBuilder.parsePutFilePayload(packet.payload);
 
             System.out.println("    path=" + data.path + " size=" + data.content.length);
@@ -199,15 +191,11 @@ public class ClientHandler implements Runnable {
      * ペイロード構造: [path]
      */
     private void handleUnlock(Packet packet) throws IOException {
-        // 修正: PayloadBuilderを使ってパスを取り出す (new Stringダメ絶対)
-        String path = PayloadBuilder.parseStringPayload(packet.payload);
-        System.out.println("  [UNLOCK] path=" + path);
+        PayloadBuilder.LockReqData data = PayloadBuilder.parseUnlockPayload(packet.payload);
 
-        // プロトコル上の簡易化:
-        // クライアントはUNLOCK時にモードを送ってこない設計のため、
-        // ここでは便宜上 "rw" (書き込みロック) を解除しようと試みます。
-        // ※本来はクライアントが「何を解除したいか」を送るべきです。
-        lockManager.unlock(path, "rw");
+        System.out.println("  [UNLOCK] path=" + data.path + " mode=" + data.mode);
+
+        lockManager.unlock(data.path, data.mode);
 
         SocketIO.send(socket, new Packet(Command.RES_OK));
     }
