@@ -1,0 +1,16 @@
+# javadoc出力
+doc/
+docs/
+
+# サーバのディレクトリ
+server_storage/
+storage_*/
+
+# クライアントのキャッシュディレクトリ
+client_cache*/
+cache_*/
+
+# javaのコンパイルファイル
+/common/*.class
+/server/*.class
+/client/*/class
