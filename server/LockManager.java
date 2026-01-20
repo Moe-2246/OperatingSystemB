@@ -42,7 +42,7 @@ public class LockManager {
      * @throws InterruptedException 待機中にスレッドが割り込みを受けた場合
      * @throws IllegalArgumentException 未知のモードが指定された場合
      */
-    public synchronized void lock(String path, String mode) throws InterruptedException {
+    public synchronized boolean lock(String path, String mode) {
         FileLockInfo info = lockTable.computeIfAbsent(path, p -> new FileLockInfo());
 
         if (mode.equals("ro")) {
@@ -50,18 +50,20 @@ public class LockManager {
 
             // 書き込み中(writer=true)なら、終わるまで寝て待つ
             while (!info.canRead()) {
-                wait();
+                return false;
             }
             // 起きたら（書き込みが終わっていたら）自分のカウントを増やす
             info.acquireRead();
+            return true;
 
         } else if (mode.equals("wo") || mode.equals("rw")) {
             // --- 書き込みロック要求 ---
 
             while (!info.canWrite()) {
-                wait();
+                return false;
             }
             info.acquireWrite();
+            return true;
 
         } else {
             throw new IllegalArgumentException("Unknown lock mode: " + mode);
@@ -93,6 +95,6 @@ public class LockManager {
             lockTable.remove(path);
         }
 
-        notifyAll(); // 待っているスレッドを起こす
+        //notifyAll(); // 待っているスレッドを起こす
     }
 }

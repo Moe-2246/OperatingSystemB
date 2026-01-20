@@ -115,16 +115,17 @@ public class ClientHandler implements Runnable {
         // 1. パース処理 (警告が出ていた変数や複雑なdis処理は削除)
         PayloadBuilder.LockReqData data = PayloadBuilder.parseLockReqPayload(packet.payload);
 
+        boolean ok = lockManager.lock(data.path, data.mode);
+
         System.out.println("  [LOCK_REQ] path=" + data.path + " mode=" + data.mode);
 
-        try {
-            // 2. ロック取得（取得できるまでブロック待機）
-            lockManager.lock(data.path, data.mode);
+        if (ok) {
+            // 2. ロック取得（取得できなければエラーを返す）
 
             System.out.println("  -> LOCK GRANTED");
             SocketIO.send(socket, new Packet(Command.RES_OK));
 
-        } catch (InterruptedException e) {
+        } else {
             // 待機中に割り込みが入った場合
             SocketIO.send(socket, new Packet(Command.RES_FAIL));
         }
