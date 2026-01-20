@@ -13,4 +13,7 @@ cache_*/
 # javaのコンパイルファイル
 /common/*.class
 /server/*.class
-/client/*/class
+/client/*.class
+
+# ログ
+logs/
